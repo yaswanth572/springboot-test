@@ -1,28 +1,27 @@
-# Use Amazon Linux 2 as the base image
-FROM amazonlinux:latest
+# Stage 1: Build the application
+FROM maven:3.8.6-openjdk-17-slim AS build
+LABEL maintainer="vignan"
 
-# Set the maintainer
-LABEL maintainer="Your Name <your.email@example.com>"
+WORKDIR /opt/app
 
-# Set the working directory
-WORKDIR /opt
+# Copy only the necessary files for the build
+COPY pom.xml ./
+COPY src ./src
 
-# Install OpenJDK 17
-RUN yum install java-17-amazon-corretto -y
+# Build the application
+RUN mvn clean package -DskipTests
 
-# Install Maven and other dependencies
-RUN yum install -y maven \
-    && yum clean all
+# Stage 2: Create a minimal runtime image
+FROM openjdk:17-jdk-slim
+LABEL maintainer="vignan"
 
-# Copy all files from the Spring Boot app directory to the container
-COPY . /opt
+WORKDIR /opt/app
 
-# Run multiple commands
-RUN mvn clean install
+# Copy the jar file from the build stage
+COPY --from=build /opt/app/target/gs-spring-boot-0.1.0.jar /opt/app/gs-spring-boot-0.1.0.jar
 
+# Expose the necessary port
+EXPOSE 8082
 
-# Copy the newly created JAR file to the current directory
-#COPY target/your-app.jar /opt/
-
-# Set the entry point to run the Java application
-ENTRYPOINT [ "java", "-jar", "/opt/target/gs-spring-boot-0.1.0.jar" ]
+# Run the application
+CMD ["java", "-jar", "/opt/app/gs-spring-boot-0.1.0.jar"]
