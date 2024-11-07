@@ -12,17 +12,19 @@ RUN apt update && \
     apt install -y maven && \
     apt clean
 
-# Copy all files from the Spring Boot app directory to the container
-COPY . .
 
-# Build the Spring Boot application
+
+# Copy all files from the Spring Boot app directory to the container
+COPY . /opt
+
+# Run multiple commands
 RUN mvn clean package
 
-# Specify the JAR file name here, assuming it matches the built file from Maven
-ARG JAR_FILE=target/gs-spring-boot-0.1.0.jar
+# Copy the newly created JAR file to the current directory
+#COPY target/your-app.jar /opt/
 
 # Set the entry point to run the Java application
-ENTRYPOINT ["java", "-jar", "/opt/${JAR_FILE}"]
+ENTRYPOINT [ "java", "-jar", "/opt/target/gs-spring-boot-0.1.0.jar" ]
 
 
 

@@ -71,7 +71,7 @@ kubectl get pods -l app=spring
 # Choose any one of the pod names from the list
 kubectl port-forward pod/springboot-deployment-7d6949f574-gwtwq 8081:8081
 
-
+kubectl logs springboot-deployment-7d6f49566c-5qk8w
 
 # Access the application locally in your host
     curl http://localhost:8081
@@ -119,6 +119,14 @@ http://100.27.17.207:8001/api/v1/namespaces/kubernetes-dashboard/services/http:k
 
 
 kubectl apply -f ./sample_deploy.yml
+kubectl get deployment my-deployment
+kubectl logs springboot-deployment-7d6f49566c-5qk8w
+
+kubectl describe deployment <deployment-name>
+
+
+
+
 kubectl delete -f ./sample_deploy
 
 kubectl apply -f ./sample_pod.yml
