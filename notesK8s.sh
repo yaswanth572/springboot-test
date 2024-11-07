@@ -37,7 +37,20 @@ kubectl version --client
 kubectl version --client --output=yaml
 
 # Step 13: Start Minikube with Docker driver
+  
+sudo usermod -aG docker $USER && newgrp docker
+
 minikube start --driver=docker
+
+minikube status
+# minikube
+# type: Control Plane
+# host: Running
+# kubelet: Running
+# apiserver: Running
+# kubeconfig: Configured
+
+
 
 # Step 14: (Optional) Force start Minikube with Docker driver if needed
 # minikube start --driver=docker --force
@@ -58,17 +71,22 @@ kubectl get pods -l app=spring
 # Choose any one of the pod names from the list
 kubectl port-forward pod/springboot-deployment-7d6949f574-gwtwq 8081:8081
 
-# Access the application locally
- curl http://localhost:8081
-Greetings from  'vignan' deployed JAVA app in virtual Machine..!!! Host private IPv4 Address: 10.244.0.5
+
+
+# Access the application locally in your host
+    curl http://localhost:8081
+    Greetings from  'vignan' deployed JAVA app in virtual Machine..!!! Host private IPv4 Address: 10.244.0.5
 
 
 #  access externally in browser
- ec2-public-ip:8081
-http://100.27.17.207:8081/
+# if you deployed application in ec2/azure vm
+
+kubectl port-forward service/spring-service:8081:8081 --address 0.0.0.0
+  ec2-public-ip:8081
+  http://100.27.17.207:8081/
 
 
-STEP 8 – Hit the below command to start the kubernetes
+STEP 8 Hit the below command to start the kubernetes
 dashboard in EC2
 
 
