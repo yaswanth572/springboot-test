@@ -81,7 +81,8 @@ kubectl logs springboot-deployment-7d6f49566c-5qk8w
 #  access externally in browser
 # if you deployed application in ec2/azure vm
 
-kubectl port-forward service/spring-service:8081:8081 --address 0.0.0.0
+kubectl port-forward service/spring-service 8081:8081 --address 0.0.0.0
+
   ec2-public-ip:8081
   http://100.27.17.207:8081/
 
